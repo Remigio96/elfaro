@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ContactMessageController extends Controller
 {
@@ -17,7 +18,7 @@ class ContactMessageController extends Controller
     }
 
     /**
-     * Almacenar un nuevo mensaje de contacto en la base de datos.
+     * Almacenar un nuevo mensaje de contacto en la base de datos y enviar un correo electrónico.
      */
     public function store(Request $request)
     {
@@ -43,8 +44,15 @@ class ContactMessageController extends Controller
             'user_id' => $data['user_id'] ?? null,
         ];
 
-        // Crear el mensaje de contacto
+        // Crear el mensaje de contacto en la base de datos
         $contactMessage = ContactMessage::create($contactMessageData);
+
+        // Enviar el correo electrónico al contacto de "El Faro News"
+        Mail::send('emails.contact', $contactMessageData, function ($message) use ($data) {
+            $message->to('elfaronews.contacto@gmail.com', 'El Faro News')
+                    ->subject($data['subject']);
+            $message->from($data['email'], $data['name']);
+        });
 
         // Redirigir de vuelta con un mensaje de éxito
         return redirect()->route('contact.create')->with('success', 'Mensaje de contacto enviado exitosamente.');
