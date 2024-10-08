@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Artículos</h1>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Artículos</h1>
     <a href="{{ route('articles.create') }}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Crear Nuevo Artículo</a>
 </div>
 
